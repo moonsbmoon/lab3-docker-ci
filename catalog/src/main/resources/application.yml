@@ -1,0 +1,43 @@
+server:
+  port: 8081
+  shutdown: graceful
+
+spring:
+  application:
+    name: catalog
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  # --- ДОБАВЛЕНЫ НАСТРОЙКИ RABBITMQ ---
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+  # -------------------------------------
+
+# Настройка задержки для нагрузочного тестирования (Задание 12)
+# По умолчанию 0, в docker-compose можно передать CATALOG_DELAY_MS=300
+catalog:
+  delay-millis: ${CATALOG_DELAY_MS:0}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true # Включает liveness и readiness для Docker
+  tracing:
+    sampling:
+      probability: 1.0 # Отправлять 100% трасс в Zipkin
+  zipkin:
+    tracing:
+      # ВАЖНО: обращаемся по имени сервиса, а не localhost
+      endpoint: http://zipkin:9411/api/v2/spans
+
+logging:
+  pattern:
+    # Добавляем traceId и spanId в логи (Задание 11)
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

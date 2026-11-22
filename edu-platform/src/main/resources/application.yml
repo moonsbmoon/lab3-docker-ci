@@ -1,0 +1,48 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: edu-platform
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/edu_platform}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true # <-- ВАЖНО ДЛЯ ПРОВЕРКИ N+1
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+# Секретный ключ для JWT (ДОЛЖЕН СОВПАДАТЬ с gateway/application.yml)
+app:
+  jwt:
+    secret: mySuperSecretKeyForEduPlatformAndGateway1234567890!@
+    expiration: 86400000

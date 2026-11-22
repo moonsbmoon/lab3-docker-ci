@@ -1,0 +1,26 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: enrollment-route
+          uri: http://enrollment:8082
+          predicates:
+            - Path=/api/enrollments/**
+        - id: catalog-route
+          uri: http://catalog:8081
+          predicates:
+            - Path=/api/courses/**
+        - id: edu-platform-route
+          uri: http://edu-platform:8080
+          predicates:
+            - Path=/api/auth/**, /api/users/**, /api/subscriptions/**
+
+# Секретный ключ для проверки JWT (ДОЛЖЕН СОВПАДАТЬ с тем, что используется в edu-platform)
+app:
+  jwt:
+    secret: mySuperSecretKeyForEduPlatformAndGateway1234567890!@

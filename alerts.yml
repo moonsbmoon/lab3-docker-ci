@@ -1,0 +1,16 @@
+groups:
+  - name: error_rate_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_server_requests_seconds_count{status=~"5..", job="enrollment"}[5m]))
+            /
+            sum(rate(http_server_requests_seconds_count{job="enrollment"}[5m]))
+          ) > 0.2
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate is above 20% for enrollment service"
+          description: "The error rate is {{ $value | humanizePercentage }} over the last 5 minutes."
