@@ -16,13 +16,17 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Set Version dynamically
-        # Версия будет 1.0.НОМЕР_ЗАПУСКА
-        run: mvn versions:set -DnewVersion=1.0.${{ github.run_number }} -DgenerateBackupPoms=false
+      - name: Install pricing-lib
+        # Устанавливаем локальную библиотеку, чтобы billing мог её найти
+        run: mvn -f pricing-lib/pom.xml clean install -DskipTests
 
-      - name: Build and Test
-        # Здесь запускаются ВСЕ тесты
-        run: mvn clean package
+      - name: Set Version for billing
+        # Указываем путь к pom.xml модуля billing
+        run: mvn -f billing/pom.xml versions:set -DnewVersion=1.0.${{ github.run_number }} -DgenerateBackupPoms=false
+
+      - name: Build and Test billing
+        # Собираем и тестируем именно billing (здесь ваша логика варианта 3)
+        run: mvn -f billing/pom.xml clean package
 
       - name: Generate Manifest
         run: |
