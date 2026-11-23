@@ -1,0 +1,44 @@
+name: Build and Publish
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Set Version dynamically
+        # Версия будет 1.0.НОМЕР_ЗАПУСКА
+        run: mvn versions:set -DnewVersion=1.0.${{ github.run_number }} -DgenerateBackupPoms=false
+
+      - name: Build and Test
+        # Здесь запускаются ВСЕ тесты
+        run: mvn clean package
+
+      - name: Generate Manifest
+        run: |
+          echo "Version: 1.0.${{ github.run_number }}" > manifest.txt
+          echo "Commit: ${{ github.sha }}" >> manifest.txt
+          echo "Run: ${{ github.run_number }}" >> manifest.txt
+          echo "Java: 21" >> manifest.txt
+          echo "Spring Boot: 3.3.5" >> manifest.txt
+          echo "Supported API: 1.0, 2.0" >> manifest.txt
+          echo "DB Schema: v2" >> manifest.txt
+          sha256sum billing/target/billing-1.0.${{ github.run_number }}.jar >> manifest.txt
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: |
+            billing/target/billing-1.0.${{ github.run_number }}.jar
+            manifest.txt
