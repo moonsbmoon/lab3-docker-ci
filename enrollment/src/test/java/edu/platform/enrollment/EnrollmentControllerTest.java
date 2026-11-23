@@ -31,7 +31,7 @@ class EnrollmentControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.title").isEqualTo("ThisTestWillFail");
+                .jsonPath("$.title").isEqualTo("Java");
     }
 
     @Test
