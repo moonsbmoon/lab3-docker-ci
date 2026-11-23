@@ -20,7 +20,7 @@
         </processorPath>
         <module name="edu-platform" />
       </profile>
-      <profile name="Annotation profile for billing" enabled="true">
+      <profile name="Annotation profile for payment" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -29,8 +29,8 @@
         </processorPath>
         <module name="payment" />
         <module name="catalog" />
-        <module name="billing" />
         <module name="enrollment" />
+        <module name="billing" />
       </profile>
     </annotationProcessing>
   </component>

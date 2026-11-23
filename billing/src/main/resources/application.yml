@@ -1,5 +1,5 @@
 server:
-  port: 8083 # <-- Должен быть 8083, а не 8080!
+  port: 8083
 
 spring:
   application:
@@ -22,12 +22,14 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: health,info,metrics,prometheus
-    endpoint:
-      health:
-        probes:
-          enabled: true
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
