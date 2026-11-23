@@ -22,3 +22,12 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,prometheus
+    endpoint:
+      health:
+        probes:
+          enabled: true

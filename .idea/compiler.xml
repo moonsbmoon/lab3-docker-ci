@@ -20,7 +20,7 @@
         </processorPath>
         <module name="edu-platform" />
       </profile>
-      <profile name="Annotation profile for catalog" enabled="true">
+      <profile name="Annotation profile for billing" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

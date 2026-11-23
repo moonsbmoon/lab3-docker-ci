@@ -1,3 +1,6 @@
 ### 1
 POST http://localhost:8082/api/enrollments?courseId=1&userId=555
 Idempotency-Key: crash-test-1
+
+### Проверка readiness (JAR)
+GET http://localhost:8083/actuator/health/readiness
